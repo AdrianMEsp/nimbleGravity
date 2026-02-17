@@ -18,16 +18,26 @@ export async function getJobs() {
     }
 }
 
-export async function applyToJob({ uuid, candidateId, jobId, repoUrl }) {
+export async function applyToJob({ uuid, candidateId, applicationId, jobId, repoUrl }: {
+    uuid: string;
+    candidateId: string;
+    applicationId: string;
+    jobId: string;
+    repoUrl: string;
+}) {
     try {
         const res = await fetch(`${APIURL}/api/candidate/apply-to-job`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ uuid, candidateId, jobId, repoUrl })
+            body: JSON.stringify({ uuid, candidateId, applicationId, jobId, repoUrl })
         })
-        return res.json();
-    } catch (error) {
-        throw new Error(error);
+        if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(`Error ${res.status}: ${errorText}`);
+        }
+        return await res.json();
+    } catch (error: any) {
+        throw new Error(`Failed to apply: ${error.message}`);
     }
 
 }

@@ -18,6 +18,7 @@ export default function JobItem({ job, candidate, onSubmit }) {
             await onSubmit({
                 uuid: candidate.uuid,
                 candidateId: candidate.candidateId,
+                applicationId: candidate.applicationId,
                 jobId: job.id,
                 repoUrl,
             });
